@@ -1,4 +1,5 @@
 # slic
+allows you to do fast recursive remote direcory copies
 
 ## straight scp
 $ time scp -r data/ seb@Nacho2:~/out
