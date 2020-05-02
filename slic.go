@@ -121,14 +121,3 @@ func rmkdir(host, dest string) error {
 	}
 	return nil
 }
-
-//if p == tcp {
-//	fmt.Printf("skipping self %v\n", p)
-//	return nil
-//}
-//fmt.Printf("path: %v\n", p)
-//var g errgroup.Group
-//g.Go(func() error {
-//	return list(g, fc, p, filepath.Join(prefix, filepath.Dir(tcp)), dest)
-//})
-//return g.Wait
