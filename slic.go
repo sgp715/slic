@@ -15,7 +15,6 @@ var dest = flag.String("dest", "", "directory to send files")
 var host = flag.String("host", "", "host to send files")
 var jobs = flag.Int("jobs", 100, "max number of jobs to use")
 
-
 func main() {
 	flag.Parse()
 	fi, err := os.Stat(*src)
@@ -43,7 +42,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fc := make(chan fileDest, *jobs)
+	fc := make(chan fileDesc, *jobs)
 	var g errgroup.Group
 	g.Go(func() error {
 		err := list(fc, *src)
@@ -79,20 +78,20 @@ func syncDirs(src, dest, host string) error {
 	return nil
 }
 
-type fileDest struct {
+type fileDesc struct {
 	file string
 	aPath string
 	rPath string
 }
 
-func (fd fileDest) dest(host, dest string) string {
+func (fd fileDesc) dest(host, dest string) string {
 	return fmt.Sprintf("%v:%v", host, filepath.Join(dest, fd.rPath))
 }
 
-func list(fc chan fileDest, src string) error {
+func list(fc chan fileDesc, src string) error {
 	if err := filepath.Walk(src, func(p string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
-			fc <- fileDest{ file: filepath.Base(p), aPath: p, rPath: strings.TrimPrefix(p, src) }
+			fc <- fileDesc{ file: filepath.Base(p), aPath: p, rPath: strings.TrimPrefix(p, src) }
 		}
 		return nil
 	}); err != nil {
