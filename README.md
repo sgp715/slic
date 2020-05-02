@@ -59,6 +59,6 @@ user	1m32.844s
 sys	0m36.513s
 
 ## comparison
-* disks write speed 1.8 GBps
+* ssd disk write speed 1.8 GBps
 * slic 10 parallel jobs -> 10GB / 44secs = 227.272727 MBps
 * scp -r -> 10GB / 72secs = 138.888889 MBps
