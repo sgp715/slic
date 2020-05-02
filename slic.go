@@ -57,9 +57,6 @@ func main() {
 func syncDirs(src, dest, host string) error {
 	fmt.Printf("sending %v -> %v\n", src, dest)
 	if err := filepath.Walk(src, func(p string, info os.FileInfo, err error) error {
-		if p == src {
-			return nil
-		}
 		if info.IsDir() {
 			if err := rmkdir(host, filepath.Join(dest, strings.TrimPrefix(p, src))); err != nil {
 				fmt.Println(err)
@@ -85,9 +82,6 @@ func (fd fileDest) dest(host, dest string) string {
 
 func list(fc chan fileDest, src string) error {
 	if err := filepath.Walk(src, func(p string, info os.FileInfo, err error) error {
-		if p == src {
-			return nil
-		}
 		if !info.IsDir() {
 			fc <- fileDest{ file: filepath.Base(p), aPath: p, rPath: strings.TrimPrefix(p, src) }
 		}
