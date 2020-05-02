@@ -30,24 +30,12 @@ func main() {
 		fmt.Println("src must be dir")
 		os.Exit(1)
 	}
-	fc := make(chan fileDest, 10)
-	var g errgroup.Group
-	fmt.Printf("sending %v -> %v\n", *src, *dest)
-	if err := filepath.Walk(*src, func(p string, info os.FileInfo, err error) error {
-		if p == *src {
-			return nil
-		}
-		if info.IsDir() {
-			if err := rmkdir(*host, filepath.Join(*dest, strings.TrimPrefix(p, *src))); err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-		}
-		return nil
-	}); err != nil {
+	if err := syncDirs(*src, *dest, *host); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	fc := make(chan fileDest, 10)
+	var g errgroup.Group
 	g.Go(func() error {
 		err := list(fc, *src)
 		close(fc)
@@ -64,6 +52,25 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func syncDirs(src, dest, host string) error {
+	fmt.Printf("sending %v -> %v\n", src, dest)
+	if err := filepath.Walk(src, func(p string, info os.FileInfo, err error) error {
+		if p == src {
+			return nil
+		}
+		if info.IsDir() {
+			if err := rmkdir(host, filepath.Join(dest, strings.TrimPrefix(p, src))); err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 type fileDest struct {
