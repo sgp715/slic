@@ -23,7 +23,11 @@ func main() {
 		fmt.Println("jobs >= 1")
 		os.Exit(1)
 	}
-	if err != nil {	
+	if *host == "" || *src == "" || *dest == "" {
+		fmt.Println("./slic -src <src> -host <host> -dest <dest>")
+		os.Exit(1)
+	}
+	if err != nil {
 		fmt.Println("src invalid")
 		os.Exit(1)
 	}
