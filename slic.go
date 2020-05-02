@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var src = flag.String("tcp", "", "directory to upload")
+var src = flag.String("src", "", "directory to upload")
 var dest = flag.String("dest", "", "directory to send files")
 var host = flag.String("host", "", "host to send files")
 
@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 	fi, err := os.Stat(*src)
 	if err != nil {
-		fmt.Println("tcp invalid")
+		fmt.Println("src invalid")
 		os.Exit(1)
 	}
 	if !strings.Contains(*host, "@") {
@@ -27,7 +27,7 @@ func main() {
 		os.Exit(1)
 	}
 	if !fi.Mode().IsDir() {
-		fmt.Println("tcp must be dir")
+		fmt.Println("src must be dir")
 		os.Exit(1)
 	}
 	fc := make(chan fileDest, 10)
