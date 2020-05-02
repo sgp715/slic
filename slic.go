@@ -13,12 +13,17 @@ import (
 var src = flag.String("src", "", "directory to upload")
 var dest = flag.String("dest", "", "directory to send files")
 var host = flag.String("host", "", "host to send files")
+var jobs = flag.Int("jobs", 100, "max number of jobs to use")
 
 
 func main() {
 	flag.Parse()
 	fi, err := os.Stat(*src)
-	if err != nil {
+	if *jobs < 1 {
+		fmt.Println("jobs >= 1")
+		os.Exit(1)
+	}
+	if err != nil {	
 		fmt.Println("src invalid")
 		os.Exit(1)
 	}
@@ -34,7 +39,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fc := make(chan fileDest, 10)
+	fc := make(chan fileDest, *jobs)
 	var g errgroup.Group
 	g.Go(func() error {
 		err := list(fc, *src)
