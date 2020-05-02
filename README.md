@@ -19,7 +19,7 @@ user	0m42.438s
 sys	0m17.559s
 
 ## slic
-$time go run slic.go -src data -host seb@Nacho2 -dest ~/out
+$ time go run slic.go -src data -host seb@Nacho2 -dest ~/out
 sending data -> /home/seb/out
 executing: ssh seb@Nacho2 "mkdir /home/seb/out"
 mkdir: cannot create directory ‘/home/seb/out’: File exists
