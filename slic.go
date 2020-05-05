@@ -52,8 +52,9 @@ func main() {
 	for f := range fc {
 		fmt.Printf("copying: %v\n", f)
 		aPath := f.aPath
+		dPath := f.dest(*host, *dest)
 		g.Go(func() error {
-			return scp(aPath, f.dest(*host, *dest))
+			return scp(aPath, dPath)
 		})
 	}
 	if err := g.Wait(); err != nil {
